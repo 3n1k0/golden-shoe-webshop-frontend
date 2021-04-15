@@ -7,20 +7,23 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Footer from "../components/FooterElements";
 import { addToCart } from "../redux/actions/cartActions";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { BiHeart } from "react-icons/bi";
 import { RiStarSFill } from "react-icons/ri";
 import { FiTruck } from "react-icons/fi";
 import { GiReturnArrow } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 export const DropDownContainer = styled.div`
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0px;
 
-p{
-  padding: 10px;
-}
-`
+  p {
+    padding-top: 0;
+  }
+`;
 
 export const SizeSelector = styled.select`
   font-size: 16px;
@@ -52,6 +55,8 @@ export const SizeSelector = styled.select`
   }
 `;
 
+export const AddQty = styled(SizeSelector)``;
+
 export const AddToCartButton = styled.button`
   display: inline-block;
   margin-bottom: 0;
@@ -69,7 +74,6 @@ export const AddToCartButton = styled.button`
   padding: 7px 20px;
   font-size: 15px;
   transition: background 0.2s, border-color, 0.2s, color 0.2s;
-  
 
   &:hover {
   }
@@ -133,7 +137,7 @@ export const FirstBigContainer = styled.div`
     padding: 5px;
   }
 
-  div{
+  div {
     display: flex;
   }
 `;
@@ -162,11 +166,16 @@ export const SecondBigContainer = styled.div`
 
 export const AddToCartContainer = styled.div`
   display: flex;
-  margin-top: 50px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 120%;
-  margin-bottom: 30px;
+  margin: 30px 0;
+  height: 100%;
+
+  span {
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
 `;
 
 export const Stars = styled(RiStarSFill)`
@@ -246,6 +255,12 @@ export const Status = styled.div`
   padding-bottom: 10px;
 `;
 
+const OutOfStock = styled.p`
+  font-size: 15px;
+  color: #010101;
+  padding-top: 10px;
+`;
+
 const ProductPage = ({ match, history }) => {
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
@@ -268,8 +283,6 @@ const ProductPage = ({ match, history }) => {
     history.push(`/cart`);
   };
 
-
-
   return (
     <>
       <GlobalStyle />
@@ -290,38 +303,58 @@ const ProductPage = ({ match, history }) => {
             <p>(149 reviews)</p>
           </Reviews>
           <Status>
-            Status: {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+            {product.countInStock > 0 ? "In Stock 🟢" : "Out of Stock ⭕"}
           </Status>
           <Price>€ {product.price}</Price>
           <Color>
             <b>Color:</b> {product.color}
           </Color>
-          <DropDownContainer>
-            <p>Quantity</p>
-            <SizeSelector value={qty} onChange={(e) => setQty(e.target.value)}>
-              {new Array(product.countInStock).fill(0).map((item, index) => (
-                <option key={index + 1} value={index + 1}>
-                  {index + 1}
-                </option>
-              ))}
-            </SizeSelector>
-            <p style={{ paddingTop: "20px" }}>Size (EU)</p>
-            <SizeSelector>
-              <option>37</option>
-              <option>38 - out of stock -</option>
-              <option>39</option>
-              <option>41</option>
-              <option>42</option>
-              <option>43 - out of stock -</option>
-            </SizeSelector>
-          </DropDownContainer>
-          <AddToCartContainer>
-            <AddToCartButton onClick={addToCartHandler}>
-              Add to cart
-            </AddToCartButton>
 
-            <StyledLikeButton />
-            <NavLink to="/liked"></NavLink>
+          {product.countInStock !== 0 ? (
+            <DropDownContainer>
+              <p>Quantity</p>
+              <AddQty value={qty} onChange={(e) => setQty(e.target.value)}>
+                {new Array(product.countInStock).fill(0).map((item, index) => (
+                  <option key={index + 1} value={index + 1}>
+                    {index + 1}
+                  </option>
+                ))}
+              </AddQty>
+              <p style={{ paddingTop: "20px" }}>Size (EU)</p>
+              <SizeSelector>
+                <option>37</option>
+                <option>38 - out of stock -</option>
+                <option>39</option>
+                <option>41</option>
+                <option>42</option>
+                <option>43 - out of stock -</option>
+              </SizeSelector>
+            </DropDownContainer>
+          ) : (
+            <OutOfStock>This item is currently out of stock.</OutOfStock>
+          )}
+
+          <AddToCartContainer>
+            {product.countInStock === 0 ? (
+              <>
+                <span>
+                  <AddToCartButton onClick={addToCartHandler}>
+                    Preorder
+                  </AddToCartButton>
+                  <StyledLikeButton />
+                  <NavLink to="/liked"></NavLink>
+                </span>
+                <p>Delivery time: 3-4 weeks</p>
+              </>
+            ) : (
+              <span>
+                <AddToCartButton onClick={addToCartHandler}>
+                  Add to cart
+                </AddToCartButton>
+                <StyledLikeButton />
+                <NavLink to="/liked"></NavLink>
+              </span>
+            )}
           </AddToCartContainer>
 
           <ShippingInformation>

@@ -43,8 +43,8 @@ export const DeleteButton = styled.div`
 `;
 
 export const Trashcan = styled(FaRegTrashAlt)`
-  color: red;
-  margin-right: 25px;
+  color: darkred;
+  margin: 25px;
   font-size: 1.2em;
 `;
 

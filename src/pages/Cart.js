@@ -12,27 +12,39 @@ import { AddToCartButton } from "./ProductPage";
 
 export const CartContainer = styled.div`
   width: 100%;
-  min-height: 100vh;
-  padding: 100px;
+  text-align: center;
+  padding-top: 80px;
   display: grid;
   place-items: center;
-  
 
-  h3 {
-    padding: 50px;
+  span {
+    padding-top: 50px;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
     text-align: center;
+    @media screen and (min-width: 1025px) {
+      width: 80%;
+    }
 
     a {
-      color: black;
+      color: darksalmon;
       text-decoration: underline;
     }
-  }
-  img {
-    padding-right: 10px;
-  }
-  p {
-    width: 250px;
-    padding: 5px;
+    img {
+      padding-right: 10px;
+    }
+    p {
+      padding: 5px;
+      font-size: 12px;
+
+      @media screen and (min-width: 1025px) {
+        font-size: inherit;
+      }
+    }
   }
 `;
 
@@ -83,29 +95,30 @@ const CartScreen = () => {
       <GlobalStyle />
       <CartContainer>
         <h2>Shopping Cart</h2>
-
-        {cartItems.length === 0 ? (
-          <h3>
-            Your Cart Is Empty
-            <br /> <Link to="/">Back To Shop</Link>
-          </h3>
-        ) : (
-          cartItems.map((item) => (
-            <CartItem
-              key={item.product}
-              item={item}
-              qtyChangeHandler={qtyChangeHandler}
-              removeHandler={removeFromCartHandler}
-            />
-          ))
-        )}
-        {cartItems.length !== 0 && (
-          <OrderTotal>
-            <p>Subtotal ({getCartCount()}) items</p>
-            <p>€{getCartSubTotal()}</p>
-            <AddToCartButton>Proceed To Checkout</AddToCartButton>
-          </OrderTotal>
-        )}
+        <span>
+          {cartItems.length === 0 ? (
+            <h3>
+              Your Cart Is Empty
+              <br /> <Link to="/">Back To Shop</Link>
+            </h3>
+          ) : (
+            cartItems.map((item) => (
+              <CartItem
+                key={item.product}
+                item={item}
+                qtyChangeHandler={qtyChangeHandler}
+                removeHandler={removeFromCartHandler}
+              />
+            ))
+          )}
+          {cartItems.length !== 0 && (
+            <OrderTotal>
+              <p>Subtotal ({getCartCount()}) items</p>
+              <p>€{getCartSubTotal()}</p>
+              <AddToCartButton>Proceed To Checkout</AddToCartButton>
+            </OrderTotal>
+          )}
+        </span>
       </CartContainer>
       <Footer />
     </>

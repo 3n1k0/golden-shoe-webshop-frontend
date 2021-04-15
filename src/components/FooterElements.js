@@ -23,13 +23,14 @@ export const SocialMedia = styled.div`
 
 export const SocialMediaWrap = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   max-width: 1100px;
   margin: 16px auto 0 auto;
 
-  @media screen and (max-width: 1025px) {
-    flex-direction: column;
+  @media screen and (min-width: 1025px) {
+    flex-direction: row;
   }
 
   p {
