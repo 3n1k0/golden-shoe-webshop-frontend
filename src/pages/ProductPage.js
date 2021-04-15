@@ -7,12 +7,11 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Footer from "../components/FooterElements";
 import { addToCart } from "../redux/actions/cartActions";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { BiHeart } from "react-icons/bi";
 import { RiStarSFill } from "react-icons/ri";
 import { FiTruck } from "react-icons/fi";
 import { GiReturnArrow } from "react-icons/gi";
-import { Link } from "react-router-dom";
 
 export const DropDownContainer = styled.div`
   display: flex;
